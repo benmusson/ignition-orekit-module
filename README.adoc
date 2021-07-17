@@ -59,4 +59,3 @@ from org.hipparchus.geometry.euclidean.threed import Vector3D
 Copyright (C) 2021 Ben Musson
 
 Free use of this software is granted under the terms of the MIT License.
-See the link:LICENSE.adoc[] file for details.
