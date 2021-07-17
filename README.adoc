@@ -1,0 +1,62 @@
+= Orekit Ignition Module
+:toc:
+
+== Background
+https://www.orekit.org/[OREKIT (ORbits Extrapolation KIT)] is a free low-level space dynamics library written in Java. 
+
+The Orekit library relies on some external data for physical models. 
+Typical data are the Earth Orientation Parameters and the leap seconds history, both being provided by the IERS or the planetary ephemerides provided by JPL or IMCCE.
+
+This Ignition module allows an Ignition gateway to provide Orekit data for use by Ignition clients to run scripts utilizing Orekit classes. 
+
+== Getting Started
+=== Building
+This module is built using Inductive Automation's https://github.com/inductiveautomation/ignition-module-tools[gradle-module-plugin].
+To build all projects, from the root of the repository,
+
+----
+// Windows
+gradlew.bat build
+
+// Mac/Linux
+./gradlew build
+----
+
+=== External Data
+Users of this module must provide their own Orekit data for the physical models required by Orekit library. 
+A starter dataset is currently provided on the Orekit forge and can be downloaded https://gitlab.orekit.org/orekit/orekit-data/-/archive/master/orekit-data-master.zip[here].
+Extract these files anywhere on your file system that will be available to the Ignition gateway.
+
+== Use
+=== Installation
+See official Ignition documentation for details on https://docs.inductiveautomation.com/display/DOC81/Installing+or+Upgrading+a+Module[Installing or Upgrading a Module].
+
+=== Module Setup
+The paths to the folders containing external data must be set on the Ignition gateway. 
+The paths can be set under "Config/Orekit/Settings/External Data". 
+Multiple folder paths can be set using ; as a delimiter between folder paths.
+
+=== Script Usage
+This module includes all Orekit and Hipparchus `+.jars+` for use in all Ignition scripting contexts.
+
+.Import Example
+----
+from org.orekit.frames import FramesFactory, TopocentricFrame
+from org.orekit.time import TimeScalesFactory, AbsoluteDate
+from org.orekit.utils import PVCoordinates, Constants, IERSConventions
+from org.orekit.orbits import CartesianOrbit
+from org.orekit.propagation.analytical import KeplerianPropagator
+from org.orekit.bodies import OneAxisEllipsoid, GeodeticPoint
+
+from org.hipparchus.geometry.euclidean.threed import Vector3D
+----
+
+== Future Goals
+. Ability to specify local Orekit data on a per-project basis.
+. Ability to share external Orekit data across the Gateway Area Network (GAN).
+
+== Copyright and Licensing
+Copyright (C) 2021 Ben Musson
+
+Free use of this software is granted under the terms of the MIT License.
+See the link:LICENSE.adoc[] file for details.

@@ -1,0 +1,71 @@
+plugins {
+    id "io.ia.sdk.modl" version "0.1.0-SNAPSHOT-10"
+}
+
+ext {
+    sdk_version = "8.1.2"
+}
+
+version = "10.3.1"
+
+ignitionModule {
+    /*
+     * Human readable name of the module, as will be displayed on the gateway status page
+     */
+    name = "Orekit"
+
+    /*
+     * Name of the '.modl' file to be created, without file extension.
+     */
+    fileName = "Orekit.modl"
+    /*
+     * Unique identifier for the module.  Reverse domain convention is recommended (e.g.: com.mycompany.charting-module)
+     */
+    id = "com.github.benmusson.ignition.orekit"
+
+    moduleVersion = version
+
+    moduleDescription = "Scripting functions for interacting with OREKIT (ORbits Extrapolation KIT)."
+    /*
+     * Minimum version of Ignition required for the module to function correctly.  This typically won't change over
+     * the course of a major Ignition (7.9, 8.0, etc) version, except for when the Ignition Platform adds/changes APIs
+     * used by the module.
+     */
+    requiredIgnitionVersion = "8.0.10"
+    /*
+     *  This is a map of String: String, where the 'key' represents the fully qualified path to the project
+     *  (using gradle path syntax), and the value is the shorthand Scope string.
+     *  Example entry: [ ":gateway": "G", ":common": "GC", ":vision-client": "C" ]
+     */
+    projectScopes = [
+        ":client" : "CD",
+        ":common" : "GCD",
+        ":designer" : "D",
+        ":gateway" : "G"
+    ]
+
+    /*
+     * Add your module dependencies here, following the examples, with scope being one or more of G, C or D,
+     * for (G)ateway, (D)esigner, Vision (C)lient.
+     *
+     * Example Value:
+     * moduleDependencies = [
+           "com.inductiveautomation.vision": "CD",
+           "com.inductiveautomation.opcua": "G"
+     * ]
+     */
+    moduleDependencies = [ : ]
+
+    /*
+     * Map of fully qualified hook class to the shorthand scope.  Only one scope per hook class.
+     *
+     * Example entry: "com.myorganization.vectorizer.VectorizerDesignerHook": "D"
+     */
+    hooks = [
+        "com.github.benmusson.ignition.orekit.gateway.OrekitGatewayHook" : "G",
+        "com.github.benmusson.ignition.orekit.client.OrekitClientHook" : "C",
+        "com.github.benmusson.ignition.orekit.designer.OrekitDesignerHook" : "D"
+    ]
+
+    applyInductiveArtifactRepo = true
+}

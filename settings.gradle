@@ -1,0 +1,19 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+        maven {
+            url 'https://nexus.inductiveautomation.com/repository/public'
+        }
+    }
+}
+
+rootProject.name = "orekit"
+
+include(
+":",
+    ":common",
+    ":gateway",
+    ":client",
+    ":designer"
+)

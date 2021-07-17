@@ -1,0 +1,18 @@
+plugins {
+    id "java-library"
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+dependencies {
+    // add common scoped dependencies here
+    modlApi("org.orekit:orekit:10.3")
+    modlApi("org.hipparchus:hipparchus-core:1.8")
+    modlApi("org.hipparchus:hipparchus-filtering:1.8")
+    modlApi("org.hipparchus:hipparchus-fitting:1.8")
+    modlApi("org.hipparchus:hipparchus-geometry:1.8")
+    modlApi("org.hipparchus:hipparchus-ode:1.8")
+    modlApi("org.hipparchus:hipparchus-optim:1.8")
+    modlApi("org.hipparchus:hipparchus-stat:1.8")
+}
