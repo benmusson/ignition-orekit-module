@@ -12,15 +12,6 @@ This Ignition module allows an Ignition gateway to provide Orekit data for use b
 == Getting Started
 === Building
 This module is built using Inductive Automation's https://github.com/inductiveautomation/ignition-module-tools[gradle-module-plugin].
-To build all projects, from the root of the repository,
-
-----
-// Windows
-gradlew.bat build
-
-// Mac/Linux
-./gradlew build
-----
 
 === External Data
 Users of this module must provide their own Orekit data for the physical models required by Orekit library. 

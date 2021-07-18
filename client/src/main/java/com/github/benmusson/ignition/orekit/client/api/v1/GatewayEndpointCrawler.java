@@ -1,31 +1,27 @@
-package com.github.benmusson.ignition.orekit.client.data;
+package com.github.benmusson.ignition.orekit.client.api.v1;
 
-import com.github.benmusson.ignition.orekit.client.api.v1.OrekitWebAPIClient;
-import org.json.JSONException;
+import com.inductiveautomation.ignition.common.gson.JsonArray;
+import com.inductiveautomation.ignition.common.gson.JsonElement;
+import com.inductiveautomation.ignition.common.gson.JsonObject;
 import org.orekit.data.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
-import java.util.List;
 import java.util.regex.Pattern;
 
-public class GatewayProviderCrawler implements DataProvider {
+public class GatewayEndpointCrawler implements DataProvider {
 
-    private OrekitWebAPIClient client;
     private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final OrekitAPIClient client;
 
-    public GatewayProviderCrawler(OrekitWebAPIClient client) {
+    public GatewayEndpointCrawler(OrekitAPIClient client) {
         this.client = client;
     }
 
-    /**
-     * @param supported
-     * @param visitor
-     * @deprecated
-     */
     @Override
     @Deprecated
     public boolean feed(Pattern supported, DataLoader visitor) {
@@ -43,24 +39,25 @@ public class GatewayProviderCrawler implements DataProvider {
     }
 
     private boolean throwableFeed(Pattern supported, DataLoader visitor, DataProvidersManager manager)
-            throws InterruptedException, JSONException, IOException, ParseException {
+            throws InterruptedException, IOException, ParseException {
 
-        List<String> files = client.listFiles();
+        JsonArray files = client.getDirectory();
 
         if (files == null) {
             return false;
 
         } else {
-
             boolean loaded = false;
-
-            for (String name : files) {
+            for (JsonElement element : files) {
+                JsonObject jo = element.getAsJsonObject();
 
                 if (visitor.stillAcceptsData()) {
+                    String name = jo.get("name").getAsString();
                     NamedData data = new NamedData(name, () -> {
                         try {
-                            return client.getFile(name);
+                            return new FileInputStream(client.getFile(name));
                         } catch (InterruptedException e) {
+                            logger.error("Error reading file", e);
                             return null;
                         }
                     });
@@ -69,20 +66,15 @@ public class GatewayProviderCrawler implements DataProvider {
                     if (supported.matcher(data.getName()).matches()) {
                         InputStream is = data.getStreamOpener().openStream();
 
-                        try {
-                            visitor.loadData(is, name);
-                            loaded = true;
+                        visitor.loadData(is, name);
+                        loaded = true;
 
-                        } finally {
-                            is.close();
-                        }
+                        is.close();
                     }
                 }
             }
-
             return loaded;
         }
     }
-
 }
 
