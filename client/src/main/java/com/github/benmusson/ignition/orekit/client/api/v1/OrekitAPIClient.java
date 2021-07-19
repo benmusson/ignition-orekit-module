@@ -1,5 +1,6 @@
 package com.github.benmusson.ignition.orekit.client.api.v1;
 
+import com.github.benmusson.ignition.orekit.client.data.ClientFileCache;
 import com.inductiveautomation.ignition.client.model.ClientContext;
 import com.inductiveautomation.ignition.common.gson.JsonArray;
 import com.inductiveautomation.ignition.common.gson.JsonObject;
@@ -12,26 +13,20 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.Optional;
 
 public class OrekitAPIClient {
 
     private final ClientContext context;
     private final HttpClient client;
     private final ClientEndpointProvider provider;
+    private final ClientFileCache cache;
 
     public OrekitAPIClient(ClientContext context) {
         this.context = context;
-        this.provider = new ClientEndpointProvider(context);
         this.client = HttpClient.newBuilder().build();
-    }
-
-    public Path getCacheFolder() {
-        Path p = context.getLaunchContext().getGwCacheDir().toPath().resolve(
-                ClientEndpointProvider.MOUNT_ALIAS);
-        p.toFile().mkdir();
-        return p;
+        this.provider = new ClientEndpointProvider(context);
+        this.cache = ClientFileCache.get(context);
     }
 
     public JsonArray getDirectory() throws IOException, InterruptedException {
@@ -57,12 +52,12 @@ public class OrekitAPIClient {
     public File getFile(String name) throws IOException, InterruptedException {
         JsonObject properties = this.getDirectory(name);
 
-        File f = getCacheFolder().resolve(name).toFile();
-        if (f.exists()) {
-            if (f.lastModified() == properties.get("modified").getAsLong()) {
-                return f;
+        Optional<File> cachedFile = cache.retrieve(name);
+        if (cachedFile.isPresent()) {
+            if (cachedFile.get().lastModified() == properties.get("modified").getAsLong()) {
+                return cachedFile.get();
             } else {
-                f.delete();
+                cache.remove(name);
             }
         }
 
@@ -72,7 +67,7 @@ public class OrekitAPIClient {
                 .build();
 
         HttpResponse<InputStream> response = client.send(req, HttpResponse.BodyHandlers.ofInputStream());
-        Files.copy(response.body(), f.toPath());
+        File f = cache.store(name, response.body());
         f.setLastModified(properties.get("modified").getAsLong());
         return f;
 

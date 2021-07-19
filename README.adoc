@@ -14,7 +14,7 @@ This Ignition module allows an Ignition gateway to provide Orekit data for use b
 This module is built using Inductive Automation's https://github.com/inductiveautomation/ignition-module-tools[gradle-module-plugin].
 
 === External Data
-Users of this module must provide their own Orekit data for the physical models required by Orekit library. 
+Users of this module must provide their own data for the physical models required by Orekit library.
 A starter dataset is currently provided on the Orekit forge and can be downloaded https://gitlab.orekit.org/orekit/orekit-data/-/archive/master/orekit-data-master.zip[here].
 Extract these files anywhere on your file system that will be available to the Ignition gateway.
 
@@ -25,7 +25,7 @@ See official Ignition documentation for details on https://docs.inductiveautomat
 === Module Setup
 The paths to the folders containing external data must be set on the Ignition gateway. 
 The paths can be set under "Config/Orekit/Settings/External Data". 
-Multiple folder paths can be set using ; as a delimiter between folder paths.
+Multiple folder paths can be set using ; as a delimiter.
 
 === Script Usage
 This module includes all Orekit and Hipparchus `+.jars+` for use in all Ignition scripting contexts.

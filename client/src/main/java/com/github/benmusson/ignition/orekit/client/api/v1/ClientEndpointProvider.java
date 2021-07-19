@@ -7,7 +7,7 @@ public class ClientEndpointProvider implements EndpointProvider {
 
     private final ClientContext context;
 
-    ClientEndpointProvider(ClientContext context) {
+    public ClientEndpointProvider(ClientContext context) {
         this.context = context;
     }
 

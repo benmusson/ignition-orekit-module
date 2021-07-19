@@ -13,6 +13,4 @@ dependencies {
 
     // add gateway scoped dependencies here
     compileOnly(project(":common"))
-//    compileOnly("org.orekit:orekit:10.3")
-    implementation("org.apache.ftpserver:ftpserver:1.1.1")
 }
