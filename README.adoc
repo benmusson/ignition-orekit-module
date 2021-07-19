@@ -2,19 +2,26 @@
 :toc:
 
 == Background
-https://www.orekit.org/[OREKIT (ORbits Extrapolation KIT)] is a free low-level space dynamics library written in Java. 
+https://www.orekit.org/[OREKIT (ORbits Extrapolation KIT)] is a free low-level space dynamics library written in Java.
 
-The Orekit library relies on some external data for physical models. 
-Typical data are the Earth Orientation Parameters and the leap seconds history, both being provided by the IERS or the planetary ephemerides provided by JPL or IMCCE.
+The Orekit library relies on external data for physical models; this module allows an Ignition gateway to provide this data to connected clients on an as-needed basis. Local caching is provided in order to reduce network load.
 
-This Ignition module allows an Ignition gateway to provide Orekit data for use by Ignition clients to run scripts utilizing Orekit classes. 
+Typical data are the Earth Orientation Parameters and the leap seconds history, both being provided by the *IERS* or the planetary ephemerides provided by *JPL* or *IMCCE*.
+
+== Library Versions
+This module includes the following libraries:
+
+. `Orekit 10.3.1`
+. `Hipparchus 1.8`
+
+and depends on `Ignition 8.0.10` or newer.
 
 == Getting Started
 === Building
 This module is built using Inductive Automation's https://github.com/inductiveautomation/ignition-module-tools[gradle-module-plugin].
 
 === External Data
-Users of this module must provide their own data for the physical models required by Orekit library.
+Users of this module must provide their own data for the physical models.
 A starter dataset is currently provided on the Orekit forge and can be downloaded https://gitlab.orekit.org/orekit/orekit-data/-/archive/master/orekit-data-master.zip[here].
 Extract these files anywhere on your file system that will be available to the Ignition gateway.
 
@@ -24,11 +31,12 @@ See official Ignition documentation for details on https://docs.inductiveautomat
 
 === Module Setup
 The paths to the folders containing external data must be set on the Ignition gateway. 
-The paths can be set under "Config/Orekit/Settings/External Data". 
-Multiple folder paths can be set using ; as a delimiter.
+The paths can be set on the gateway under `"Config/Orekit/Settings/External Data"`.
+Multiple folder paths can be set using `;` as a delimiter.
 
 === Script Usage
 This module includes all Orekit and Hipparchus `+.jars+` for use in all Ignition scripting contexts.
+See Orekit https://www.orekit.org/site-orekit-10.3.1/index.html[Technical Documentation] and https://www.orekit.org/site-orekit-10.3.1/apidocs/index.html[Javadocs] for complete details and usage examples.
 
 .Import Example
 ----
@@ -40,6 +48,37 @@ from org.orekit.propagation.analytical import KeplerianPropagator
 from org.orekit.bodies import OneAxisEllipsoid, GeodeticPoint
 
 from org.hipparchus.geometry.euclidean.threed import Vector3D
+----
+
+=== Scripting Functions
+Several scripting functions are provided through the `system.orekit` name space.
+This functions can be used to modify the data providers available to a client; for instance, to allow a client to use a local data directory.
+
+The `default` providers vary per scope.
+In the Designer and Client scopes, the `default` provider is the GatewayEndpointCrawler that communicates with the Gateway.
+In the Gateway scope, the `default` providers are DirectoryCrawlers for the configured External Data paths.
+
+.Add/Removing Data Providers
+[source,python]
+----
+system.orekit.addProvider(...)
+system.orekit.removeProvider(...)
+system.orekit.addDefaultProviders()
+system.oreit.removeDefaultProviders()
+----
+
+.Creating New Providers
+[source,python]
+----
+system.orekit.newDirectoryCrawler(...)
+system.orekit.newZipJarCrawler(...)
+system.orekit.newNetworkCrawler(...)
+----
+
+.Clearing Cached Files
+[source,python]
+----
+system.orekit.clearCache()
 ----
 
 == Future Goals
