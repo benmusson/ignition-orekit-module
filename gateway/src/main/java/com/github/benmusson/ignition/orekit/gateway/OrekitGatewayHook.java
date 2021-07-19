@@ -25,19 +25,16 @@ import org.slf4j.LoggerFactory;
 public class OrekitGatewayHook extends AbstractGatewayModuleHook {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private GatewayContext context;
     private DefaultDataProviderManager manager;
     private RouteHandlerMounter api;
 
     @Override
     public void setup(GatewayContext context) {
         try {
-            this.context = context;
             this.manager = new GatewayDataProviderManager(context);
             this.api = new GatewayRouteHandler(context);
 
             BundleUtil.get().addBundle("orekit", this.getClass(), "orekit");
-
             context.getSchemaUpdater().updatePersistentRecords(OrekitInternalConfiguration.META);
 
             logger.info("Orekit module setup.");
@@ -61,6 +58,7 @@ public class OrekitGatewayHook extends AbstractGatewayModuleHook {
     public void shutdown() {
         try {
             manager.removeDefaultProviders();
+
             BundleUtil.get().removeBundle("orekit");
 
             logger.info("Orekit module stopped.");

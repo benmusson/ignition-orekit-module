@@ -5,7 +5,7 @@ import com.inductiveautomation.ignition.gateway.model.GatewayContext;
 import simpleorm.dataset.SQuery;
 
 public class OrekitInternalConfiguration extends PersistentRecord {
-        public static final RecordMeta<OrekitInternalConfiguration> META = new RecordMeta(
+        public static final RecordMeta<OrekitInternalConfiguration> META = new RecordMeta<>(
             OrekitInternalConfiguration.class,
             "orekit_config");
 
@@ -21,7 +21,7 @@ public class OrekitInternalConfiguration extends PersistentRecord {
             new Category("OrekitInternalConfiguration.Category.DataServer", 125)
                     .include(DataPaths);
 
-    private static final String PATH_DELIMETER = ";";
+    private static final String PATH_DELIMITER = ";";
 
     @Override
     public RecordMeta<?> getMeta() {
@@ -31,14 +31,14 @@ public class OrekitInternalConfiguration extends PersistentRecord {
     public String[] getGatewayDataPaths() {
         String gatewayDataPaths = getString(DataPaths);
         if (gatewayDataPaths != null) {
-            return getString(DataPaths).split(PATH_DELIMETER);
+            return getString(DataPaths).split(PATH_DELIMITER);
         } else {
             return null;
         }
     }
 
     public static OrekitInternalConfiguration getConfig(GatewayContext context) {
-        SQuery<OrekitInternalConfiguration> query = new SQuery(OrekitInternalConfiguration.META);
+        SQuery<OrekitInternalConfiguration> query = new SQuery<>(OrekitInternalConfiguration.META);
         return context.getPersistenceInterface().queryOne(query);
     }
 }

@@ -28,12 +28,10 @@ public class ClientDataScriptModule implements DataScriptModule {
         );
     }
 
-    private ClientContext context;
-    private ClientFileCache cache;
-    private ClientDataProviderManager manager;
+    private final ClientFileCache cache;
+    private final ClientDataProviderManager manager;
 
     public ClientDataScriptModule(ClientContext context) {
-        this.context = context;
         this.cache = ClientFileCache.get(context);
         this.manager = ClientDataProviderManager.get(context);
     }

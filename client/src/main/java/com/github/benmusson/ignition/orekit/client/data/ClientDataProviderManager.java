@@ -11,22 +11,19 @@ import java.util.List;
 
 public class ClientDataProviderManager implements DefaultDataProviderManager {
 
-    private final OrekitAPIClient client;
-    private final GatewayEndpointCrawler gatewayCrawler;
+    private final List<DataProvider> defaults = new ArrayList<>();
 
     public static ClientDataProviderManager get(ClientContext context) {
         return new ClientDataProviderManager(context);
     }
 
     ClientDataProviderManager(ClientContext context) {
-        this.client = new OrekitAPIClient(context);
-        this.gatewayCrawler = new GatewayEndpointCrawler(client);
+        OrekitAPIClient client = new OrekitAPIClient(context);
+        defaults.add(new GatewayEndpointCrawler(client));
     }
 
     @Override
     public List<DataProvider> getDefaultProviders() {
-        List<DataProvider> defaults = new ArrayList<>();
-        defaults.add(this.gatewayCrawler);
         return defaults;
     }
 }

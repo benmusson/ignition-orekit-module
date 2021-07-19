@@ -38,9 +38,7 @@ public class ClientFileCache implements FileCache {
     @Override
     public void remove(String name) {
         Optional<File> f = this.retrieve(name);
-        if (f.isPresent()) {
-            f.get().delete();
-        }
+        f.ifPresent(File::delete);
     }
 
     @Override

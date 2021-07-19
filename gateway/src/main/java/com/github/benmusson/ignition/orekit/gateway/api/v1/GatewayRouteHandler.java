@@ -50,9 +50,8 @@ public class GatewayRouteHandler implements RouteHandlerMounter {
                                 "attachment;filename="+f.getName());
                         response.setContentLength((int) f.length());
 
-                        logger.info(String.format("Beginning to stream file %s to client %s",
-                                f.getName(),
-                                request.getRequest().getSession().getId()
+                        logger.trace(String.format("Beginning to stream file %s to client.",
+                                f.getName()
                         ));
 
                         Files.copy(f.toPath(), response.getOutputStream());

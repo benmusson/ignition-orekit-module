@@ -4,8 +4,6 @@ import org.orekit.data.*;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.util.List;
 
 public interface DataScriptModule {
 

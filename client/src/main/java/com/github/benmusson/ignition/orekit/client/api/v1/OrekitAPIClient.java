@@ -17,13 +17,11 @@ import java.util.Optional;
 
 public class OrekitAPIClient {
 
-    private final ClientContext context;
     private final HttpClient client;
     private final ClientEndpointProvider provider;
     private final ClientFileCache cache;
 
     public OrekitAPIClient(ClientContext context) {
-        this.context = context;
         this.client = HttpClient.newBuilder().build();
         this.provider = new ClientEndpointProvider(context);
         this.cache = ClientFileCache.get(context);
