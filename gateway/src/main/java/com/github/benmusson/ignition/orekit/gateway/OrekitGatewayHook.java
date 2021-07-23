@@ -13,7 +13,7 @@ import com.github.benmusson.ignition.orekit.gateway.api.v1.GatewayRouteHandler;
 import com.github.benmusson.ignition.orekit.gateway.data.GatewayDataProviderManager;
 import com.github.benmusson.ignition.orekit.gateway.db.OrekitInternalConfiguration;
 import com.github.benmusson.ignition.orekit.gateway.db.OrekitInternalConfigurationPage;
-import com.github.benmusson.ignition.orekit.gateway.script.ScriptManagerPackageMounter;
+import com.github.benmusson.ignition.orekit.gateway.script.ScriptManagerUtils;
 import com.inductiveautomation.ignition.common.BundleUtil;
 import com.inductiveautomation.ignition.common.licensing.LicenseState;
 import com.inductiveautomation.ignition.common.script.ScriptManager;
@@ -117,7 +117,7 @@ public class OrekitGatewayHook extends AbstractGatewayModuleHook {
 
         ArrayList<String> blacklist = new ArrayList<>();
         blacklist.add("org.orekit.compiler.plugin.DefaultDataContextPlugin");
-        ScriptManagerPackageMounter.addScriptPackage(
+        ScriptManagerUtils.addScriptPackage(
                 manager,
                 "system.orekit",
                 "org.orekit",

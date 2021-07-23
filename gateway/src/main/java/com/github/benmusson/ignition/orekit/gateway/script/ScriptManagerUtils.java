@@ -12,12 +12,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-public class ScriptManagerPackageMounter {
+public class ScriptManagerUtils {
 
-    private final static Logger logger = LoggerFactory.getLogger(ScriptManagerPackageMounter.class);
+    private final static Logger logger = LoggerFactory.getLogger(ScriptManagerUtils.class);
 
     public static void addScriptPackage(ScriptManager manager, String path, String packagePath, List<String> blacklist) {
-        addScriptPackage(manager, path, packagePath, ScriptManagerPackageMounter.class.getClassLoader(), blacklist);
+        addScriptPackage(manager, path, packagePath, ScriptManagerUtils.class.getClassLoader(), blacklist);
     };
 
     public static void addScriptPackage(ScriptManager manager, String path, String packagePath, ClassLoader classLoader, List<String> blacklist) {
