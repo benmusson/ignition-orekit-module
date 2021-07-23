@@ -3,6 +3,8 @@ package com.github.benmusson.ignition.orekit.client.script;
 import com.github.benmusson.ignition.orekit.client.data.ClientDataProviderManager;
 import com.github.benmusson.ignition.orekit.client.data.ClientFileCache;
 import com.github.benmusson.ignition.orekit.common.script.DataScriptModule;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.reflect.ClassPath;
 import com.inductiveautomation.ignition.client.model.ClientContext;
 import com.inductiveautomation.ignition.common.BundleUtil;
 import com.inductiveautomation.ignition.common.script.hints.ScriptArg;
@@ -94,4 +96,19 @@ public class ClientDataScriptModule implements DataScriptModule {
             @ScriptArg("url") String url) throws MalformedURLException {
         return new NetworkCrawler(new URL(url));
     }
+
+    @ScriptFunction(docBundlePrefix = BUNDLE_PREFIX)
+    public ImmutableSet<ClassPath.ClassInfo> listClasses(String packageName) throws IOException {
+        ClassPath cp = ClassPath.from(this.getClass().getClassLoader());
+        return cp.getTopLevelClasses(packageName);
+    }
+
+    static class Test1 {
+        public String run() {
+            return "This is a test";
+        }
+    }
+
+    public static final Class<Test1> Test = Test1.class;
+
 }

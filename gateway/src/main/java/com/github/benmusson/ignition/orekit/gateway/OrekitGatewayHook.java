@@ -1,6 +1,7 @@
 package com.github.benmusson.ignition.orekit.gateway;
 
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -12,8 +13,10 @@ import com.github.benmusson.ignition.orekit.gateway.api.v1.GatewayRouteHandler;
 import com.github.benmusson.ignition.orekit.gateway.data.GatewayDataProviderManager;
 import com.github.benmusson.ignition.orekit.gateway.db.OrekitInternalConfiguration;
 import com.github.benmusson.ignition.orekit.gateway.db.OrekitInternalConfigurationPage;
+import com.github.benmusson.ignition.orekit.gateway.script.ScriptManagerPackageMounter;
 import com.inductiveautomation.ignition.common.BundleUtil;
 import com.inductiveautomation.ignition.common.licensing.LicenseState;
+import com.inductiveautomation.ignition.common.script.ScriptManager;
 import com.inductiveautomation.ignition.gateway.dataroutes.RouteGroup;
 import com.inductiveautomation.ignition.gateway.model.AbstractGatewayModuleHook;
 import com.inductiveautomation.ignition.gateway.model.GatewayContext;
@@ -31,13 +34,18 @@ public class OrekitGatewayHook extends AbstractGatewayModuleHook {
     @Override
     public void setup(GatewayContext context) {
         try {
+            logger.trace("Orekit module beginning setup...");
+
+            logger.trace("Creating new data provider manager...");
             this.manager = new GatewayDataProviderManager(context);
+
+            logger.trace("Creating new route handler...");
             this.api = new GatewayRouteHandler(context);
 
             BundleUtil.get().addBundle("orekit", this.getClass(), "orekit");
             context.getSchemaUpdater().updatePersistentRecords(OrekitInternalConfiguration.META);
 
-            logger.info("Orekit module setup.");
+            logger.trace("Orekit module setup complete.");
         } catch (Exception e) {
             logger.error("Error setting up Orekit module.", e);
         }
@@ -46,6 +54,9 @@ public class OrekitGatewayHook extends AbstractGatewayModuleHook {
     @Override
     public void startup(LicenseState activationState) {
         try {
+            logger.trace("Orekit module starting...");
+
+            logger.trace("Adding default providers...");
             manager.addDefaultProviders();
 
             logger.info("Orekit module started.");
@@ -57,6 +68,9 @@ public class OrekitGatewayHook extends AbstractGatewayModuleHook {
     @Override
     public void shutdown() {
         try {
+            logger.trace("Orekit module stopping...");
+
+            logger.trace("Removing default providers...");
             manager.removeDefaultProviders();
 
             BundleUtil.get().removeBundle("orekit");
@@ -95,5 +109,19 @@ public class OrekitGatewayHook extends AbstractGatewayModuleHook {
     @Override
     public void mountRouteHandlers(RouteGroup routes) {
         api.mountRouteHandlers(routes);
+    }
+
+    @Override
+    public void initializeScriptManager(ScriptManager manager) {
+        super.initializeScriptManager(manager);
+
+        ArrayList<String> blacklist = new ArrayList<>();
+        blacklist.add("org.orekit.compiler.plugin.DefaultDataContextPlugin");
+        ScriptManagerPackageMounter.addScriptPackage(
+                manager,
+                "system.orekit",
+                "org.orekit",
+                blacklist
+        );
     }
 }

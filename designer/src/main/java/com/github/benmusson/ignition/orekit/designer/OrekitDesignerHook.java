@@ -2,6 +2,7 @@ package com.github.benmusson.ignition.orekit.designer;
 
 import com.github.benmusson.ignition.orekit.client.data.ClientDataProviderManager;
 import com.github.benmusson.ignition.orekit.client.script.ClientDataScriptModule;
+import com.github.benmusson.ignition.orekit.client.script.ScriptManagerUtils;
 import com.github.benmusson.ignition.orekit.common.data.DefaultDataProviderManager;
 import com.inductiveautomation.ignition.common.licensing.LicenseState;
 import com.inductiveautomation.ignition.common.script.ScriptManager;
@@ -10,6 +11,8 @@ import com.inductiveautomation.ignition.designer.model.AbstractDesignerModuleHoo
 import com.inductiveautomation.ignition.designer.model.DesignerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
 
 public class OrekitDesignerHook extends AbstractDesignerModuleHook {
 
@@ -49,6 +52,15 @@ public class OrekitDesignerHook extends AbstractDesignerModuleHook {
                 "system.orekit",
                 new ClientDataScriptModule(context),
                 new PropertiesFileDocProvider()
+        );
+
+        ArrayList<String> blacklist = new ArrayList<>();
+        blacklist.add("org.orekit.compiler.plugin.DefaultDataContextPlugin");
+        ScriptManagerUtils.addScriptPackage(
+                manager,
+                "system.orekit",
+                "org.orekit",
+                blacklist
         );
     }
 }
