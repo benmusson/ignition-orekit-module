@@ -188,8 +188,9 @@ Final state :  1500.0
 
 
 == Future Goals
-. Ability to specify local Orekit data on a per-project basis.
-. Ability to share external Orekit data across the Gateway Area Network (GAN).
+. Role based security for API requests.
+. Specify local Orekit data on a per-project basis.
+. Share external Orekit data across the Gateway Area Network (GAN).
 
 == Copyright and Licensing
 Copyright (C) 2021 Ben Musson
