@@ -11,7 +11,7 @@ Typical data are the Earth Orientation Parameters, and the leap seconds history,
 == Versions
 Dependencies:
 
-. `Ignition 8.0.10` or newer.
+. `Ignition 8.0.10` or newer (*Maker Edition* compatible).
 
 This module also packages the following libraries:
 
