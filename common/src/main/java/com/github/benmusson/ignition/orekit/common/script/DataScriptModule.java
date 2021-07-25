@@ -19,9 +19,4 @@ public interface DataScriptModule {
 
     void removeDefaultProviders();
 
-    DirectoryCrawler newDirectoryCrawler(String root);
-
-    ZipJarCrawler newZipJarCrawler(String path);
-
-    NetworkCrawler newNetworkCrawler(String url) throws MalformedURLException;
 }

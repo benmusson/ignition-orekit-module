@@ -14,5 +14,4 @@ dependencies {
 
     // add client scoped dependencies here
     compileOnly(project(":common"))
-
 }

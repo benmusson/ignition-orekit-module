@@ -6,7 +6,7 @@ https://www.orekit.org/[OREKIT (ORbits Extrapolation KIT)] is a free low-level s
 
 The Orekit library relies on external data for physical models; this module allows an Ignition gateway to provide this data to connected clients on an as-needed basis. Local caching is provided in order to reduce network load.
 
-Typical data are the Earth Orientation Parameters and the leap seconds history, both being provided by the *IERS* or the planetary ephemerides provided by *JPL* or *IMCCE*.
+Typical data are the Earth Orientation Parameters, and the leap seconds history, both being provided by the *IERS*, or the planetary ephemerides provided by *JPL* or *IMCCE*.
 
 == Versions
 Dependencies:
@@ -38,23 +38,25 @@ Multiple folder paths can be set using `;` as a delimiter.
 
 === Script Usage
 This module includes all Orekit and Hipparchus `+.jars+` for use in all Ignition scripting contexts.
+Classes are mounted under `system.orekit` and `system.hipparchus` respectively.
+
 See Orekit https://www.orekit.org/site-orekit-10.3.1/index.html[Technical Documentation] and https://www.orekit.org/site-orekit-10.3.1/apidocs/index.html[Javadocs] for complete details and usage examples.
 
 .Import Example
 [source,python]
 ----
-from org.orekit.frames import FramesFactory, TopocentricFrame
-from org.orekit.time import TimeScalesFactory, AbsoluteDate
-from org.orekit.utils import PVCoordinates, Constants, IERSConventions
-from org.orekit.orbits import CartesianOrbit
-from org.orekit.propagation.analytical import KeplerianPropagator
-from org.orekit.bodies import OneAxisEllipsoid, GeodeticPoint
+from system.orekit.frames import FramesFactory, TopocentricFrame
+from system.orekit.time import TimeScalesFactory, AbsoluteDate
+from system.orekit.utils import PVCoordinates, Constants, IERSConventions
+from system.orekit.orbits import CartesianOrbit
+from system.orekit.propagation.analytical import KeplerianPropagator
+from system.orekit.bodies import OneAxisEllipsoid, GeodeticPoint
 
-from org.hipparchus.geometry.euclidean.threed import Vector3D
+from system.hipparchus.geometry.euclidean.threed import Vector3D
 ----
 
-=== Scripting Functions
-Several scripting functions are provided through the `system.orekit` name space.
+=== Additional Scripting Functions
+Several additional scripting functions are provided through the `system.orekit` name space.
 These functions can be used to modify the data providers available to a client; for instance, to allow a client to use a local data directory.
 
 The `default` providers vary per scope.
@@ -70,14 +72,6 @@ system.orekit.addDefaultProviders()
 system.oreit.removeDefaultProviders()
 ----
 
-.Creating New Providers
-[source,python]
-----
-system.orekit.newDirectoryCrawler(...)
-system.orekit.newZipJarCrawler(...)
-system.orekit.newNetworkCrawler(...)
-----
-
 .Clearing Cached Files
 [source,python]
 ----
@@ -85,9 +79,9 @@ system.orekit.clearCache()
 ----
 
 === Usage Example
-This example has been adapted from the Orekit example `VisiblityCheck.java`.
+This example has been adapted from the Orekit example `VisibilityCheck.java`.
 
-.VisiblityCheck.py
+.VisibilityCheck.py
 [source,python]
 ----
 #/* Copyright 2002-2020 CS GROUP
@@ -106,28 +100,28 @@ This example has been adapted from the Orekit example `VisiblityCheck.java`.
 # * See the License for the specific language governing permissions and
 # * limitations under the License.
 # */
-from org.orekit.data import DataProvidersManager
-from org.orekit.data import ZipJarCrawler
-from org.hipparchus.geometry.euclidean.threed import Vector3D
-from org.hipparchus.ode.events import Action
-from org.orekit.bodies import BodyShape
-from org.orekit.bodies import GeodeticPoint
-from org.orekit.bodies import OneAxisEllipsoid
-from org.orekit.errors import OrekitException;
-from org.orekit.frames import Frame
-from org.orekit.frames import FramesFactory
-from org.orekit.frames import TopocentricFrame
-from org.orekit.orbits import KeplerianOrbit
-from org.orekit.orbits import Orbit
-from org.orekit.propagation import Propagator
-from org.orekit.propagation import SpacecraftState
-from org.orekit.propagation.analytical import KeplerianPropagator
-from org.orekit.propagation.events import ElevationDetector
-from org.orekit.propagation.events import EventDetector
-from org.orekit.time import AbsoluteDate
-from org.orekit.time import TimeScalesFactory
-from org.orekit.utils import PVCoordinates
-from org.orekit.utils import IERSConventions
+from system.orekit.data import DataProvidersManager
+from system.orekit.data import ZipJarCrawler
+from system.hipparchus.geometry.euclidean.threed import Vector3D
+from system.hipparchus.ode.events import Action
+from system.orekit.bodies import BodyShape
+from system.orekit.bodies import GeodeticPoint
+from system.orekit.bodies import OneAxisEllipsoid
+from system.orekit.errors import OrekitException;
+from system.orekit.frames import Frame
+from system.orekit.frames import FramesFactory
+from system.orekit.frames import TopocentricFrame
+from system.orekit.orbits import KeplerianOrbit
+from system.orekit.orbits import Orbit
+from system.orekit.propagation import Propagator
+from system.orekit.propagation import SpacecraftState
+from system.orekit.propagation.analytical import KeplerianPropagator
+from system.orekit.propagation.events import ElevationDetector
+from system.orekit.propagation.events import EventDetector
+from system.orekit.time import AbsoluteDate
+from system.orekit.time import TimeScalesFactory
+from system.orekit.utils import PVCoordinates
+from system.orekit.utils import IERSConventions
 
 from math import degrees, radians, pi
 
@@ -182,6 +176,14 @@ kepler.addEventDetector(sta1Visi)
 finalState = kepler.propagate(initialDate.shiftedBy(1500.0))
 
 print "Final state : " , finalState.getDate().durationFrom(initialDate)
+----
+.VisibilityCheck.py Output
+----
+>>>
+Visibility on station1 begins at 2004-01-01T23:30:36.436
+Visibility on station1 ends at 2004-01-01T23:44:05.224
+Final state :  1500.0
+>>>
 ----
 
 

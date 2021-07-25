@@ -3,21 +3,13 @@ package com.github.benmusson.ignition.orekit.client.script;
 import com.github.benmusson.ignition.orekit.client.data.ClientDataProviderManager;
 import com.github.benmusson.ignition.orekit.client.data.ClientFileCache;
 import com.github.benmusson.ignition.orekit.common.script.DataScriptModule;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.reflect.ClassPath;
 import com.inductiveautomation.ignition.client.model.ClientContext;
 import com.inductiveautomation.ignition.common.BundleUtil;
 import com.inductiveautomation.ignition.common.script.hints.ScriptArg;
 import com.inductiveautomation.ignition.common.script.hints.ScriptFunction;
 import org.orekit.data.DataProvider;
-import org.orekit.data.DirectoryCrawler;
-import org.orekit.data.NetworkCrawler;
-import org.orekit.data.ZipJarCrawler;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class ClientDataScriptModule implements DataScriptModule {
 
@@ -76,39 +68,5 @@ public class ClientDataScriptModule implements DataScriptModule {
         manager.removeDefaultProviders();
     }
 
-    @Override
-    @ScriptFunction(docBundlePrefix = BUNDLE_PREFIX)
-    public DirectoryCrawler newDirectoryCrawler(
-            @ScriptArg("root") String root) {
-        return new DirectoryCrawler(new File(root));
-    }
-
-    @Override
-    @ScriptFunction(docBundlePrefix = BUNDLE_PREFIX)
-    public ZipJarCrawler newZipJarCrawler(
-            @ScriptArg("path") String path) {
-        return new ZipJarCrawler(new File(path));
-    }
-
-    @Override
-    @ScriptFunction(docBundlePrefix = BUNDLE_PREFIX)
-    public NetworkCrawler newNetworkCrawler(
-            @ScriptArg("url") String url) throws MalformedURLException {
-        return new NetworkCrawler(new URL(url));
-    }
-
-    @ScriptFunction(docBundlePrefix = BUNDLE_PREFIX)
-    public ImmutableSet<ClassPath.ClassInfo> listClasses(String packageName) throws IOException {
-        ClassPath cp = ClassPath.from(this.getClass().getClassLoader());
-        return cp.getTopLevelClasses(packageName);
-    }
-
-    static class Test1 {
-        public String run() {
-            return "This is a test";
-        }
-    }
-
-    public static final Class<Test1> Test = Test1.class;
 
 }

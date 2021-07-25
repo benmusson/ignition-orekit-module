@@ -1,19 +1,20 @@
 package com.github.benmusson.ignition.orekit.gateway;
 
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import com.github.benmusson.ignition.orekit.common.api.v1.EndpointProvider;
 import com.github.benmusson.ignition.orekit.common.data.DefaultDataProviderManager;
+import com.github.benmusson.ignition.orekit.common.script.ExtendedScriptManager;
+import com.github.benmusson.ignition.orekit.common.script.ScriptPackage;
 import com.github.benmusson.ignition.orekit.gateway.api.RouteHandlerMounter;
 import com.github.benmusson.ignition.orekit.gateway.api.v1.GatewayRouteHandler;
 import com.github.benmusson.ignition.orekit.gateway.data.GatewayDataProviderManager;
 import com.github.benmusson.ignition.orekit.gateway.db.OrekitInternalConfiguration;
 import com.github.benmusson.ignition.orekit.gateway.db.OrekitInternalConfigurationPage;
-import com.github.benmusson.ignition.orekit.gateway.script.ScriptManagerUtils;
+import com.github.benmusson.ignition.orekit.gateway.script.GatewayExtendedScriptManager;
 import com.inductiveautomation.ignition.common.BundleUtil;
 import com.inductiveautomation.ignition.common.licensing.LicenseState;
 import com.inductiveautomation.ignition.common.script.ScriptManager;
@@ -115,13 +116,18 @@ public class OrekitGatewayHook extends AbstractGatewayModuleHook {
     public void initializeScriptManager(ScriptManager manager) {
         super.initializeScriptManager(manager);
 
-        ArrayList<String> blacklist = new ArrayList<>();
-        blacklist.add("org.orekit.compiler.plugin.DefaultDataContextPlugin");
-        ScriptManagerUtils.addScriptPackage(
-                manager,
-                "system.orekit",
-                "org.orekit",
-                blacklist
-        );
+        ExtendedScriptManager extendedManager = new GatewayExtendedScriptManager(manager);
+        extendedManager.addScriptPackage(
+                new ScriptPackage.ScriptPackageBuilder()
+                        .packagePath("org.orekit")
+                        .blacklist(Collections.singletonList("org.orekit.compiler.plugin.DefaultDataContextPlugin"))
+                        .build(),
+                "system.orekit");
+
+        extendedManager.addScriptPackage(
+                new ScriptPackage.ScriptPackageBuilder()
+                        .packagePath("org.hipparchus")
+                        .build(),
+                "system.hipparchus");
     }
 }

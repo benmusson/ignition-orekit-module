@@ -6,6 +6,9 @@ sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 dependencies {
+
+    compileOnly("com.inductiveautomation.ignitionsdk:ignition-common:${sdk_version}")
+
     // add common scoped dependencies here
     modlApi("org.orekit:orekit:10.3")
     modlApi("org.hipparchus:hipparchus-core:1.8")
